@@ -3,15 +3,32 @@
     <h2 class="text-black font-medium text-2xl text-center pb-6">Doświadczenie zawodowe</h2>
     <ProgressNavigation :current-step="currentStep" :total-steps="3" />
     <div class="overflow-x-auto py-4">
-      <div v-if="formData.length === 0" class="text-center p-6 bg-gray-50 rounded-lg mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      <div
+        v-if="formData.length === 0"
+        class="flex items-center justify-center flex-col text-center p-6 bg-gray-50 rounded-lg mb-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-12 w-12 mx-auto text-gray-400 mb-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
         <p class="text-gray-600">Brak doświadczenia zawodowego. Dodaj pozycję poniżej.</p>
       </div>
 
       <transition-group name="list" tag="div" v-else>
-        <div key="table-container" class="w-full border-collapse mb-4 text-black overflow-hidden rounded-lg shadow">
+        <div
+          key="table-container"
+          class="w-full border-collapse mb-4 text-black overflow-hidden rounded-lg shadow"
+        >
           <table class="w-full">
             <thead>
               <tr>
@@ -23,13 +40,19 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(exp, index) in formData" :key="`exp-${index}`" class="hover:bg-gray-50 transition-colors duration-150">
+              <tr
+                v-for="(exp, index) in formData"
+                :key="`exp-${index}`"
+                class="hover:bg-gray-50 transition-colors duration-150"
+              >
                 <td class="border border-gray-300 p-3">
                   <div class="relative">
                     <input
                       type="text"
                       :value="exp.company"
-                      @input="updateField(index, 'company', ($event.target as HTMLInputElement).value)"
+                      @input="
+                        updateField(index, 'company', ($event.target as HTMLInputElement).value)
+                      "
                       @blur="v$.$each[index]?.company.$touch()"
                       class="w-full bg-gray-100 p-2 rounded border border-transparent focus:border-blue-500 focus:bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     />
@@ -51,7 +74,9 @@
                     <input
                       type="text"
                       :value="exp.position"
-                      @input="updateField(index, 'position', ($event.target as HTMLInputElement).value)"
+                      @input="
+                        updateField(index, 'position', ($event.target as HTMLInputElement).value)
+                      "
                       @blur="v$.$each[index]?.position.$touch()"
                       class="w-full bg-gray-100 p-2 rounded border border-transparent focus:border-blue-500 focus:bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     />
@@ -73,7 +98,9 @@
                     <input
                       type="date"
                       :value="exp.dateFrom"
-                      @input="updateField(index, 'dateFrom', ($event.target as HTMLInputElement).value)"
+                      @input="
+                        updateField(index, 'dateFrom', ($event.target as HTMLInputElement).value)
+                      "
                       @blur="v$.$each[index]?.dateFrom.$touch()"
                       :max="exp.dateTo || maxDate"
                       class="w-full bg-gray-100 p-2 rounded border border-transparent focus:border-blue-500 focus:bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -96,7 +123,9 @@
                     <input
                       type="date"
                       :value="exp.dateTo"
-                      @input="updateField(index, 'dateTo', ($event.target as HTMLInputElement).value)"
+                      @input="
+                        updateField(index, 'dateTo', ($event.target as HTMLInputElement).value)
+                      "
                       @blur="v$.$each[index]?.dateTo.$touch()"
                       :min="exp.dateFrom || minDate"
                       class="w-full bg-gray-100 p-2 rounded border border-transparent focus:border-blue-500 focus:bg-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -120,8 +149,17 @@
                     @click="removeExperience(index)"
                     class="bg-red-500 text-white p-2 rounded hover:bg-red-600 cursor-pointer transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-300 flex items-center justify-center"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 mr-1"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                      />
                     </svg>
                     Usuń
                   </button>
@@ -139,8 +177,17 @@
         @click="addExperience"
         class="bg-blue-500 text-white py-2 px-6 rounded-full hover:bg-blue-600 cursor-pointer transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-md flex items-center mx-auto"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
         </svg>
         Dodaj pozycję
       </button>

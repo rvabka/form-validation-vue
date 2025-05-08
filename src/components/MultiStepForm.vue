@@ -1,7 +1,7 @@
 <template>
   <div class="h-[500px] z-10 w-screen flex justify-center rounded-2xl bg-white shadow-xl p-6">
     <form @submit.prevent="handleSubmit" class="w-full h-full flex flex-col justify-between">
-      <div class="relative flex-grow overflow-hidden">
+      <div class="relative flex-grow overflow-y-auto overflow-x-hidden">
         <transition name="slide" mode="out-in">
           <keep-alive>
             <component
