@@ -1,32 +1,21 @@
 <template>
-  <div class="h-[500px] z-10 w-screen flex justify-center rounded-2xl bg-white shadow-xl p-4">
+  <div class="h-[500px] z-10 w-screen flex justify-center rounded-2xl bg-white shadow-xl p-6">
     <form @submit.prevent="handleSubmit" class="w-full h-full flex flex-col justify-between">
-      <BasicInfoStep
-        v-if="currentStep === 1"
-        :formData="formData.basic"
-        :v$="v$.basic"
-        :current-step="currentStep"
-        :total-steps="3"
-        @update:formData="updateBasicInfo"
-      />
-
-      <ContactInfoStep
-        v-if="currentStep === 2"
-        :formData="formData.contact"
-        :v$="v$.contact"
-        :current-step="currentStep"
-        :total-steps="3"
-        @update:formData="updateContactInfo"
-      />
-
-      <ExperienceStep
-        v-if="currentStep === 3"
-        :formData="formData.experience"
-        :v$="v$.experience"
-        :current-step="currentStep"
-        :total-steps="3"
-        @update:formData="updateExperience"
-      />
+      <div class="relative flex-grow overflow-hidden">
+        <transition name="slide" mode="out-in">
+          <keep-alive>
+            <component
+              :is="currentStepComponent"
+              :key="currentStep"
+              :formData="currentStepData"
+              :v$="currentStepValidation"
+              :current-step="currentStep"
+              :total-steps="3"
+              @update:formData="updateCurrentStepData"
+            />
+          </keep-alive>
+        </transition>
+      </div>
 
       <FormNavigation
         :current-step="currentStep"
@@ -46,7 +35,7 @@ import FormNavigation from '@/components/FormNavigation.vue'
 import ContactInfoStep from '@/components/ContactInfoStep.vue'
 import ExperienceStep from '@/components/ExperienceStep.vue'
 import { computed, defineComponent, reactive, ref } from 'vue'
-import type { BasicInfo, ContactInfo, ExperienceItem, FormData } from '../types'
+import type { ExperienceItem, FormData } from '../types'
 import { required, email, helpers } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 
@@ -141,6 +130,61 @@ export default defineComponent({
 
     const v$ = useVuelidate(rules, formData)
 
+    // Use shallowRef for components to avoid deep reactivity
+    const currentStepComponent = computed(() => {
+      switch (currentStep.value) {
+        case 1:
+          return BasicInfoStep
+        case 2:
+          return ContactInfoStep
+        case 3:
+          return ExperienceStep
+        default:
+          return BasicInfoStep
+      }
+    })
+
+    const currentStepData = computed(() => {
+      switch (currentStep.value) {
+        case 1:
+          return formData.basic
+        case 2:
+          return formData.contact
+        case 3:
+          return formData.experience
+        default:
+          return formData.basic
+      }
+    })
+
+    const currentStepValidation = computed(() => {
+      switch (currentStep.value) {
+        case 1:
+          return v$.value.basic
+        case 2:
+          return v$.value.contact
+        case 3:
+          return v$.value.experience
+        default:
+          return v$.value.basic
+      }
+    })
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateCurrentStepData = (newData: any) => {
+      switch (currentStep.value) {
+        case 1:
+          formData.basic = newData
+          break
+        case 2:
+          formData.contact = newData
+          break
+        case 3:
+          formData.experience = newData
+          break
+      }
+    }
+
     const isStepInvalid = computed(() => {
       switch (currentStep.value) {
         case 1:
@@ -153,18 +197,6 @@ export default defineComponent({
           return false
       }
     })
-
-    const updateBasicInfo = (newBasicInfo: BasicInfo) => {
-      formData.basic = newBasicInfo
-    }
-
-    const updateContactInfo = (newContactInfo: ContactInfo) => {
-      formData.contact = newContactInfo
-    }
-
-    const updateExperience = (newExperience: ExperienceItem[]) => {
-      formData.experience = newExperience
-    }
 
     const prevStep = () => {
       if (currentStep.value > 1) {
@@ -203,9 +235,10 @@ export default defineComponent({
       v$,
       isStepInvalid,
       submitted,
-      updateBasicInfo,
-      updateContactInfo,
-      updateExperience,
+      currentStepComponent,
+      currentStepData,
+      currentStepValidation,
+      updateCurrentStepData,
       prevStep,
       nextStep,
       handleSubmit,
@@ -213,3 +246,20 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+</style>
